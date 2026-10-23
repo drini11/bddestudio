@@ -1,0 +1,43 @@
+package dev.jppb.bddestudio.domain.model;
+
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Table(name = "cenario", uniqueConstraints = @UniqueConstraint(columnNames = {"historia_id", "titulo"}))
+@Getter
+@Setter
+public class Cenario {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    private String titulo;
+
+    @Column(nullable = false)
+    private int posicao;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private OrigemCenario origem;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "historia_id")
+    private HistoriaUsuario historia;
+
+    @OneToMany(mappedBy = "cenario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("posicao ASC")
+    private List<Passo> passos = new ArrayList<>();
+
+    public void adicionarPasso(Passo p) {
+        p.setCenario(this);
+        passos.add(p);
+    }
+
+}

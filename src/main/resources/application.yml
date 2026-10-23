@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5434/estudio_bdd
+    username: estudio
+    password: estudio
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY:s-c}
+
+estudio:
+  ia:
+    enabled: false
