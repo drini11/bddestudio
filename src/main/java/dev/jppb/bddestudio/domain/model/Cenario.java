@@ -2,7 +2,9 @@ package dev.jppb.bddestudio.domain.model;
 
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.ArrayList;
@@ -12,6 +14,7 @@ import java.util.List;
 @Table(name = "cenario", uniqueConstraints = @UniqueConstraint(columnNames = {"historia_id", "titulo"}))
 @Getter
 @Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Cenario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,4 +43,9 @@ public class Cenario {
         passos.add(p);
     }
 
+    public Cenario(String titulo, int posicao, OrigemCenario origem) {
+        this.titulo = titulo;
+        this.posicao = posicao;
+        this.origem = origem;
+    }
 }

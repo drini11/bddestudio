@@ -25,4 +25,11 @@ public class Passo {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "cenario_id")
     private Cenario cenario;
+
+    public Passo(TipoPasso tipo, String texto, int posicao) {
+        this.tipo = tipo;
+        this.texto = texto;
+        this.posicao = posicao;
+    }
+
 }

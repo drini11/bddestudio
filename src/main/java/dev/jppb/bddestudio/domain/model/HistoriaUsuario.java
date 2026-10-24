@@ -53,5 +53,16 @@ public class HistoriaUsuario {
         c.setHistoria(this);
         cenarios.add(c);
     }
+    public HistoriaUsuario(Projeto projeto, Usuario autor, String titulo,
+                           String papel, String objetivo, String beneficio,
+                           Prioridade prioridade) {
+        this.projeto = projeto;
+        this.autor = autor;
+        this.titulo = titulo;
+        this.papel = papel;
+        this.objetivo = objetivo;
+        this.beneficio = beneficio;
+        this.prioridade = prioridade;
+    }
 
 }
