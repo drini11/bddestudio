@@ -35,4 +35,10 @@ public class Projeto {
         this.descricao = descricao;
         this.contextoDominio = contextoDominio;
     }
+
+    public void atualizar(String nome, String descricao, String contextoDominio) {
+        this.nome = nome;
+        this.descricao = descricao;
+        this.contextoDominio = contextoDominio;
+    }
 }
