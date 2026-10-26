@@ -65,4 +65,17 @@ public class HistoriaUsuario {
         this.prioridade = prioridade;
     }
 
+    public void atualizar(String titulo, String papel, String objetivo,
+                          String beneficio, Prioridade prioridade) {
+        this.titulo = titulo;
+        this.papel = papel;
+        this.objetivo = objetivo;
+        this.beneficio = beneficio;
+        this.prioridade = prioridade;
+        this.atualizadaEm = LocalDateTime.now();
+    }
+
+    public boolean foiEscritaPor(Long usuarioId) {
+        return autor.getId().equals(usuarioId);
+    }
 }

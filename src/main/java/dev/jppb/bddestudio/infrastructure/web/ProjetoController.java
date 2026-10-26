@@ -43,9 +43,9 @@ public class ProjetoController {
         return ProjetoResponse.from(pservice.atualizar(id, req.nome(), req.descricao(), req.contextoDominio()));
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void remover(@PathVariable Long id){
+    public void excluir(@PathVariable Long id) {
         pservice.excluir(id);
     }
 }
