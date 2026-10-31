@@ -18,6 +18,7 @@ public class ProjetoService {
     private final ProjetoRepository projetoRepository;
     private final HistoriaUsuarioRepository historiaUsuarioRepository;
 
+    @Transactional
     public Projeto criar(String nome, String descricao, String contextoDominio){
         String nomeLimpo = nome.strip();
         if(projetoRepository.existsByNome(nomeLimpo)){
@@ -26,16 +27,15 @@ public class ProjetoService {
         return projetoRepository.save(new Projeto(nome, descricao, contextoDominio));
     }
 
-    @Transactional
     public List<Projeto> listar(){
         return projetoRepository.findAll();
     }
 
-    @Transactional
     public Projeto buscar(Long id){
         return projetoRepository.findById(id).orElseThrow(() -> new RecursoNaoEncontradoException("Projeto", id));
     }
 
+    @Transactional
     public Projeto atualizar(Long id, String nome, String descricao, String contextoDominio){
         Projeto projeto = buscar(id);
         String nomeLimpo = nome.strip();
@@ -46,6 +46,7 @@ public class ProjetoService {
         return projeto;
     }
 
+    @Transactional
     public void excluir(Long id){
         Projeto projeto = buscar(id);
         if (historiaUsuarioRepository.existsByProjetoId(id)){

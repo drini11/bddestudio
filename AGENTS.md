@@ -18,6 +18,7 @@
 - Não usar @Data em entidades
 - Associações sempre LAZY; open-in-view desligado
 - Toda regra de negócio fica em application.service
+- @Transactional só em métodos de escrita; nunca na classe
 
 ## Comandos
 - Banco: docker compose -f docker/docker-compose.yml up -d

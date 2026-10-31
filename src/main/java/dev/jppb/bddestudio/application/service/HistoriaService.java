@@ -24,6 +24,7 @@ public class HistoriaService {
     private final ProjetoRepository projetos;
     private final UsuarioService usuarios;
 
+    @Transactional
     public HistoriaUsuario criar(Long projetoId, Long usuarioId, DadosHistoria d) {
         Usuario autor = usuarios.buscarAtual(usuarioId);
         Projeto projeto = projetos.findById(projetoId)
@@ -36,7 +37,6 @@ public class HistoriaService {
                 d.papel().strip(), d.objetivo().strip(), d.beneficio().strip(), d.prioridade()));
     }
 
-    @Transactional
     public List<HistoriaUsuario> listar(Long projetoId, Prioridade prioridade) {
         if (!projetos.existsById(projetoId)) {
             throw new RecursoNaoEncontradoException("Projeto", projetoId);
@@ -46,12 +46,12 @@ public class HistoriaService {
                 : historias.findByProjetoIdAndPrioridadeOrderByIdAsc(projetoId, prioridade);
     }
 
-    @Transactional
     public HistoriaUsuario buscar(Long id) {
         return historias.findDetalhadoById(id)
                 .orElseThrow(() -> new RecursoNaoEncontradoException("História", id));
     }
 
+    @Transactional
     public HistoriaUsuario atualizar(Long historiaId, Long usuarioId, DadosHistoria d) {
         HistoriaUsuario historia = buscarComoAutor(historiaId, usuarioId);
         String titulo = d.titulo().strip();
@@ -63,6 +63,7 @@ public class HistoriaService {
         return historia;
     }
 
+    @Transactional
     public void excluir(Long historiaId, Long usuarioId) {
         historias.delete(buscarComoAutor(historiaId, usuarioId));
     }
