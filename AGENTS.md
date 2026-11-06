@@ -22,6 +22,9 @@
 - Regra de formato de cenário (ordem, E/Mas, Quando e Então) fica só em ValidadorPassos; violação lança RegraNegocioException (422)
 - Passos são editados pelo cenário: o PUT substitui a sequência. Nunca trocar a coleção `passos` por uma nova lista (orphanRemoval); usar clear() + add
 - Autoria de cenário usa HistoriaUsuario.foiEscritaPor
+- Sugestão decidida é imutável (409). Não existe PUT nem DELETE de sugestão; o estado só muda por Sugestao.aceitar/rejeitar, chamados pelo SugestaoService
+- Regras de sugestão (motivo obrigatório na rejeição, OUTRO exige justificativa, já decidida) ficam em SugestaoService; o DTO não valida o motivo
+- Ordem de erros: 401, 404, 403, 422, 409
 
 ## Comandos
 - Banco: docker compose -f docker/docker-compose.yml up -d

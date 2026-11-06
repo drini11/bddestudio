@@ -49,6 +49,9 @@ public class HistoriaUsuario {
     private LocalDateTime criadaEm = LocalDateTime.now();
     private LocalDateTime atualizadaEm = LocalDateTime.now();
 
+    @OneToMany(mappedBy = "historia", cascade = CascadeType.REMOVE)
+    private List<Sugestao> sugestoes = new ArrayList<>();
+
     public void adicionarCenario(Cenario c){
         c.setHistoria(this);
         cenarios.add(c);
@@ -78,4 +81,5 @@ public class HistoriaUsuario {
     public boolean foiEscritaPor(Long usuarioId) {
         return autor.getId().equals(usuarioId);
     }
+
 }
