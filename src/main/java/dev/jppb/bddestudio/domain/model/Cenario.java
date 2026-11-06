@@ -48,4 +48,20 @@ public class Cenario {
         this.posicao = posicao;
         this.origem = origem;
     }
+
+    public Cenario(HistoriaUsuario historia, String titulo, int posicao, OrigemCenario origem) {
+        this(titulo, posicao, origem);
+        this.historia = historia;
+    }
+
+
+    public void atualizar(String titulo, OrigemCenario origem) {
+        this.titulo = titulo;
+        this.origem = origem;
+    }
+
+    public void substituirPassos(List<Passo> novos) {
+        passos.clear();
+        novos.forEach(this::adicionarPasso);
+    }
 }

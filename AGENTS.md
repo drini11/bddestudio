@@ -19,6 +19,9 @@
 - Associações sempre LAZY; open-in-view desligado
 - Toda regra de negócio fica em application.service
 - @Transactional só em métodos de escrita; nunca na classe
+- Regra de formato de cenário (ordem, E/Mas, Quando e Então) fica só em ValidadorPassos; violação lança RegraNegocioException (422)
+- Passos são editados pelo cenário: o PUT substitui a sequência. Nunca trocar a coleção `passos` por uma nova lista (orphanRemoval); usar clear() + add
+- Autoria de cenário usa HistoriaUsuario.foiEscritaPor
 
 ## Comandos
 - Banco: docker compose -f docker/docker-compose.yml up -d

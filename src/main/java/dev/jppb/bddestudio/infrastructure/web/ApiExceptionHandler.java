@@ -1,9 +1,6 @@
 package dev.jppb.bddestudio.infrastructure.web;
 
-import dev.jppb.bddestudio.application.exception.ConflitoException;
-import dev.jppb.bddestudio.application.exception.NaoAutenticadoException;
-import dev.jppb.bddestudio.application.exception.AcessoNegadoException;
-import dev.jppb.bddestudio.application.exception.RecursoNaoEncontradoException;
+import dev.jppb.bddestudio.application.exception.*;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.*;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -64,6 +61,13 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     public ProblemDetail acessoNegado(AcessoNegadoException ex) {
         ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, ex.getMessage());
         pd.setTitle("Acesso negado");
+        return pd;
+    }
+
+    @ExceptionHandler(RegraNegocioException.class)
+    public ProblemDetail regraNegocio(RegraNegocioException ex) {
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(422), ex.getMessage());
+        pd.setTitle("Regra de negócio violada");
         return pd;
     }
 }
