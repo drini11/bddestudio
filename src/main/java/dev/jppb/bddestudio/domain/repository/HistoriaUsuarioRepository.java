@@ -14,6 +14,7 @@ public interface HistoriaUsuarioRepository extends JpaRepository<HistoriaUsuario
     boolean existsByProjetoId(Long projetoId);
     boolean existsByProjetoIdAndTitulo(Long projetoId, String titulo);
     boolean existsByProjetoIdAndTituloAndIdNot(Long projetoId, String titulo, Long id);
+    long countByProjetoId(Long projetoId);
 
     @EntityGraph(attributePaths = {"autor", "projeto"})
     Optional<HistoriaUsuario> findDetalhadoById(Long id);

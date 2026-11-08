@@ -25,6 +25,8 @@
 - Sugestão decidida é imutável (409). Não existe PUT nem DELETE de sugestão; o estado só muda por Sugestao.aceitar/rejeitar, chamados pelo SugestaoService
 - Regras de sugestão (motivo obrigatório na rejeição, OUTRO exige justificativa, já decidida) ficam em SugestaoService; o DTO não valida o motivo
 - Ordem de erros: 401, 404, 403, 422, 409
+- Agregações (contagens por história, por origem, por decisão, por motivo) usam group by em consultas de projeção; nunca consultar história por história
+- Resumo preenche com zero os valores de enum sem ocorrência; ConsultaProjetoService não usa @Transactional (só leituras)
 
 ## Comandos
 - Banco: docker compose -f docker/docker-compose.yml up -d
