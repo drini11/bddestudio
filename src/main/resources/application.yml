@@ -7,9 +7,6 @@ spring:
     hibernate:
       ddl-auto: update
     open-in-view: false
-  ai:
-    openai:
-      api-key: ${OPENAI_API_KEY:s-c}
 
 estudio:
   ia:

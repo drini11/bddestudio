@@ -4,9 +4,7 @@
 - domain.model: entidades JPA e enums
 - domain.repository: interfaces Spring Data, sem regra de negócio
 - application.service: regras de negócio e @Transactional
-- application.port: interfaces exigidas pela aplicação (ex.: gerador de sugestões por IA)
 - infrastructure.web: controllers, DTOs, @RestControllerAdvice
-- infrastructure.ai e infrastructure.config: adaptadores e configuração
 
 ## Regras de dependência (verificadas pelo ArchUnit)
 - domain não depende de application nem de infrastructure
@@ -32,3 +30,12 @@
 - Banco: docker compose -f docker/docker-compose.yml up -d
 - Rodar: ./mvnw spring-boot:run
 - Testar: ./mvnw test
+
+## Frontend (frontend/, Vue 3 + Vite, JavaScript)
+- Sem regra de negócio: a SPA exibe o que a API devolve, inclusive as mensagens de erro (ProblemDetail)
+- Toda chamada HTTP passa por src/api/cliente.js (requisitar); as views não chamam fetch direto
+- Usuário atual fica em src/estado/usuario.js e vai no cabeçalho X-Usuario-Id
+- Comandos: cd frontend; npm install; npm run dev (http://localhost:5173)
+- CORS liberado só para http://localhost:5173 (CorsConfig); a porta é fixa no vite.config.js
+- Rótulos de enums (Prioridade, Origem, Decisão, Motivo) ficam em src/utils/rotulos.js; a tela nunca mostra o valor cru da API
+- Filtros são enviados à API como parâmetro; a SPA não filtra listas por conta própria
