@@ -25,3 +25,14 @@ export const MOTIVOS = {
     FORA_DO_ESCOPO: 'Fora do escopo',
     OUTRO: 'Outro',
 }
+
+export const TIPOS_PASSO = [
+    { valor: 'DADO', rotulo: 'Dado' },
+    { valor: 'QUANDO', rotulo: 'Quando' },
+    { valor: 'ENTAO', rotulo: 'Então' },
+    { valor: 'E', rotulo: 'E' },
+    { valor: 'MAS', rotulo: 'Mas' },
+]
+
+export const rotuloTipo = (valor) =>
+    TIPOS_PASSO.find((t) => t.valor === valor)?.rotulo ?? valor

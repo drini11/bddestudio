@@ -25,10 +25,6 @@ onMounted(async () => {
 <template>
   <section>
     <h1>Usuário de demonstração</h1>
-    <p class="aviso">
-      Isto não é login: a API só recebe o id do usuário escolhido, no cabeçalho X-Usuario-Id.
-    </p>
-
     <p v-if="carregando">Carregando...</p>
     <p v-else-if="erro" class="erro">{{ erro }}</p>
 

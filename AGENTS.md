@@ -39,3 +39,6 @@
 - CORS liberado só para http://localhost:5173 (CorsConfig); a porta é fixa no vite.config.js
 - Rótulos de enums (Prioridade, Origem, Decisão, Motivo) ficam em src/utils/rotulos.js; a tela nunca mostra o valor cru da API
 - Filtros são enviados à API como parâmetro; a SPA não filtra listas por conta própria
+- Formulários e editores não validam regra de negócio: enviam o que foi digitado e mostram o erro da API com MensagemErro
+- Componentes (src/components) recebem dados por props e emitem eventos; as chamadas à API ficam nas views
+- Depois de salvar, a view recarrega os dados da API em vez de montar o resultado localmente

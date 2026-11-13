@@ -48,6 +48,7 @@ watch(prioridade, carregarHistorias)
     <template v-if="projeto">
       <div class="cabecalho">
         <h1>{{ projeto.nome }}</h1>
+        <RouterLink :to="`/projetos/${projeto.id}/historias/nova`">+ Nova história</RouterLink>
         <RouterLink :to="`/projetos/${projeto.id}/resumo`">Ver resumo</RouterLink>
       </div>
       <p class="aviso">{{ projeto.descricao }}</p>
@@ -79,7 +80,7 @@ watch(prioridade, carregarHistorias)
         <tbody>
         <tr v-for="h in historias" :key="h.id">
           <td>
-            <strong>{{ h.titulo }}</strong><br />
+            <RouterLink :to="`/historias/${h.id}`"><strong>{{ h.titulo }}</strong></RouterLink><br />
             <small>Como {{ h.papel }}, quero {{ h.objetivo }}, para {{ h.beneficio }}</small>
           </td>
           <td>

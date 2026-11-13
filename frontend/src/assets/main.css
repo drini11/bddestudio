@@ -71,3 +71,29 @@ select { padding: 0.35rem 0.5rem; border: 1px solid var(--cor-borda); border-rad
 .indicador { display: inline-flex; flex-direction: column; align-items: center; background: #fff; border: 1px solid var(--cor-borda); border-radius: 8px; padding: 0.75rem 1.5rem; }
 .indicador .numero { font-size: 2rem; font-weight: 700; color: var(--cor-primaria); }
 .lista-simples { padding-left: 1.25rem; line-height: 1.8; }
+
+.formulario { display: grid; gap: 0.75rem; background: #fff; border: 1px solid var(--cor-borda); border-radius: 8px; padding: 1rem; margin-bottom: 1rem; }
+.formulario label { display: grid; gap: 0.25rem; font-size: 0.9rem; font-weight: 600; }
+input { padding: 0.45rem 0.6rem; border: 1px solid var(--cor-borda); border-radius: 6px; font: inherit; }
+fieldset { border: 1px solid var(--cor-borda); border-radius: 8px; padding: 0.75rem; display: grid; gap: 0.5rem; }
+.passo-linha { display: flex; gap: 0.4rem; align-items: center; }
+.passo-linha input { flex: 1; }
+.tipo-passo { width: 7rem; }
+
+.botoes { display: flex; gap: 0.5rem; }
+button.secundario { background: #fff; color: var(--cor-primaria); }
+button.perigo { background: #fff; color: var(--cor-erro); border-color: var(--cor-erro); }
+button.pequeno { padding: 0.25rem 0.55rem; }
+
+.caixa-erro { background: #fef2f2; border: 1px solid #fecaca; color: var(--cor-erro); border-radius: 6px; padding: 0.6rem 0.8rem; margin: 0.75rem 0; }
+.caixa-erro ul { margin: 0.4rem 0 0; padding-left: 1.2rem; }
+.caixa-aviso { background: #fffbeb; border: 1px solid #fde68a; color: #92400e; border-radius: 6px; padding: 0.6rem 0.8rem; margin: 0.75rem 0; }
+
+.narrativa { font-size: 1.05rem; }
+.secao { margin-top: 1.5rem; }
+.cenario { background: #fff; border: 1px solid var(--cor-borda); border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 0.75rem; }
+.cenario header { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+.cenario .etiqueta { margin-left: 0.5rem; }
+.passos { list-style: none; padding: 0; margin: 0.5rem 0 0; }
+.passos li { padding: 0.15rem 0; }
+.passos .tipo { display: inline-block; min-width: 4.5rem; font-weight: 700; color: var(--cor-primaria); }
