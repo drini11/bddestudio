@@ -11,7 +11,8 @@ export class ErroApi extends Error {
     }
 }
 
-export async function requisitar(metodo, caminho, corpo) {
+// faz a chamada e devolve a Response; qualquer status de erro vira ErroApi
+async function chamar(metodo, caminho, corpo) {
     const cabecalhos = {}
     if (corpo !== undefined) {
         cabecalhos['Content-Type'] = 'application/json'
@@ -42,10 +43,22 @@ export async function requisitar(metodo, caminho, corpo) {
         throw new ErroApi(resposta.status, problema.title || 'Erro',
             problema.detail || 'Erro ' + resposta.status, problema.erros)
     }
+    return resposta
+}
 
+export async function requisitar(metodo, caminho, corpo) {
+    const resposta = await chamar(metodo, caminho, corpo)
     if (resposta.status === 204) {
         return null
     }
     const tipo = resposta.headers.get('Content-Type') || ''
     return tipo.includes('application/json') ? resposta.json() : resposta.text()
+}
+
+// download de texto (ex.: .feature): devolve o conteúdo e o nome de arquivo sugerido pelo servidor
+export async function baixarTexto(caminho) {
+    const resposta = await chamar('GET', caminho)
+    const disposicao = resposta.headers.get('Content-Disposition') || ''
+    const nome = /filename="?([^";]+)"?/.exec(disposicao)?.[1] ?? 'arquivo.txt'
+    return { nome, conteudo: await resposta.text() }
 }

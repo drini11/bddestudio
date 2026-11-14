@@ -42,3 +42,6 @@
 - Formulários e editores não validam regra de negócio: enviam o que foi digitado e mostram o erro da API com MensagemErro
 - Componentes (src/components) recebem dados por props e emitem eventos; as chamadas à API ficam nas views
 - Depois de salvar, a view recarrega os dados da API em vez de montar o resultado localmente
+- Painel de sugestões é um componente com estado próprio (PainelSugestoes); a view da história só o encaixa e escuta o evento "mudou"
+- Rejeição sem motivo é enviada como motivo: null para a API devolver 422; a tela não bloqueia
+- Downloads usam baixarTexto (cliente.js) e salvarArquivo (utils/arquivo.js); o nome vem do Content-Disposition exposto pelo CORS

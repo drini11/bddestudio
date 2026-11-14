@@ -3,10 +3,13 @@ import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { buscarHistoria, atualizarHistoria, excluirHistoria } from '../api/historias'
 import { listarCenarios, criarCenario, atualizarCenario, excluirCenario } from '../api/cenarios'
+import { exportarFeature } from '../api/exportacao'
 import { usuarioAtual } from '../estado/usuario'
 import { rotuloPrioridade, rotuloTipo, ORIGENS } from '../utils/rotulos'
+import { salvarArquivo } from '../utils/arquivo'
 import FormularioHistoria from '../components/FormularioHistoria.vue'
 import EditorCenario from '../components/EditorCenario.vue'
+import PainelSugestoes from '../components/PainelSugestoes.vue'
 import MensagemErro from '../components/MensagemErro.vue'
 
 const route = useRoute()
@@ -28,6 +31,11 @@ const salvandoCenario = ref(false)
 const erroCenario = ref(null)
 
 const erroAcao = ref(null) // erro ao excluir
+
+// exportação do .feature
+const arquivo = ref(null)
+const exportando = ref(false)
+const erroExportacao = ref(null)
 
 // só informativo: quem decide é a API
 const naoEAutor = computed(
@@ -70,6 +78,7 @@ async function salvarHistoria(dados) {
   erroHistoria.value = null
   try {
     historia.value = await atualizarHistoria(historiaId, dados)
+    arquivo.value = null // a prévia exportada ficou desatualizada
     editandoHistoria.value = false
   } catch (e) {
     erroHistoria.value = e
@@ -105,6 +114,7 @@ async function salvarCenario(dados) {
     }
     // recarrega da API: o que aparece é o que foi gravado, na ordem gravada
     cenarios.value = await listarCenarios(historiaId)
+    arquivo.value = null
     cenarioAberto.value = null
   } catch (e) {
     erroCenario.value = e
@@ -119,8 +129,23 @@ async function excluirEsteCenario(cenario) {
   try {
     await excluirCenario(cenario.id)
     cenarios.value = await listarCenarios(historiaId)
+    arquivo.value = null
   } catch (e) {
     erroAcao.value = e
+  }
+}
+
+async function exportar() {
+  exportando.value = true
+  erroExportacao.value = null
+  arquivo.value = null
+  try {
+    arquivo.value = await exportarFeature(historiaId)
+    salvarArquivo(arquivo.value.nome, arquivo.value.conteudo)
+  } catch (e) {
+    erroExportacao.value = e // 409: sem cenários ou com sugestão pendente
+  } finally {
+    exportando.value = false
   }
 }
 </script>
@@ -141,71 +166,93 @@ async function excluirEsteCenario(cenario) {
         A API só aceita alterações do autor.
       </p>
 
-      <div class="cabecalho">
-        <h1>{{ historia.titulo }}</h1>
-        <span :class="['etiqueta', 'prioridade-' + historia.prioridade.toLowerCase()]">
-          {{ rotuloPrioridade(historia.prioridade) }}
-        </span>
-      </div>
+      <div class="duas-colunas">
+        <!-- coluna da esquerda: a história e seus cenários -->
+        <div>
+          <div class="cabecalho">
+            <h1>{{ historia.titulo }}</h1>
+            <span :class="['etiqueta', 'prioridade-' + historia.prioridade.toLowerCase()]">
+              {{ rotuloPrioridade(historia.prioridade) }}
+            </span>
+          </div>
 
-      <FormularioHistoria
-          v-if="editandoHistoria"
-          :inicial="historia"
-          :salvando="salvandoHistoria"
-          :erro="erroHistoria"
-          @salvar="salvarHistoria"
-          @cancelar="editandoHistoria = false"
-      />
+          <FormularioHistoria
+              v-if="editandoHistoria"
+              :inicial="historia"
+              :salvando="salvandoHistoria"
+              :erro="erroHistoria"
+              @salvar="salvarHistoria"
+              @cancelar="editandoHistoria = false"
+          />
 
-      <template v-else>
-        <p class="narrativa">
-          Como <strong>{{ historia.papel }}</strong>,
-          quero <strong>{{ historia.objetivo }}</strong>,
-          para <strong>{{ historia.beneficio }}</strong>.
-        </p>
-        <p class="aviso">Autor: {{ historia.autorNome }}</p>
-        <div class="botoes">
-          <button class="secundario" @click="editandoHistoria = true">Editar história</button>
-          <button class="perigo" @click="excluirEstaHistoria">Excluir história</button>
+          <template v-else>
+            <p class="narrativa">
+              Como <strong>{{ historia.papel }}</strong>,
+              quero <strong>{{ historia.objetivo }}</strong>,
+              para <strong>{{ historia.beneficio }}</strong>.
+            </p>
+            <p class="aviso">Autor: {{ historia.autorNome }}</p>
+            <div class="botoes">
+              <button class="secundario" @click="editandoHistoria = true">Editar história</button>
+              <button class="secundario" :disabled="exportando" @click="exportar">
+                {{ exportando ? 'Exportando...' : 'Exportar .feature' }}
+              </button>
+              <button class="perigo" @click="excluirEstaHistoria">Excluir história</button>
+            </div>
+          </template>
+
+          <MensagemErro :erro="erroAcao" />
+          <MensagemErro :erro="erroExportacao" />
+
+          <div v-if="arquivo" class="previa">
+            <div class="cabecalho">
+              <strong>{{ arquivo.nome }}</strong>
+              <button class="secundario pequeno" @click="salvarArquivo(arquivo.nome, arquivo.conteudo)">
+                Baixar de novo
+              </button>
+            </div>
+            <pre>{{ arquivo.conteudo }}</pre>
+          </div>
+
+          <div class="cabecalho secao">
+            <h2>Cenários</h2>
+            <button v-if="cenarioAberto === null" @click="abrirCenario('novo')">+ Novo cenário</button>
+          </div>
+
+          <EditorCenario
+              v-if="cenarioAberto !== null"
+              :key="cenarioAberto"
+              :inicial="inicialCenario"
+              :salvando="salvandoCenario"
+              :erro="erroCenario"
+              @salvar="salvarCenario"
+              @cancelar="cenarioAberto = null"
+          />
+
+          <p v-if="cenarios.length === 0 && cenarioAberto === null">Esta história ainda não tem cenários.</p>
+
+          <article v-for="c in cenarios" :key="c.id" class="cenario">
+            <header>
+              <div>
+                <strong>{{ c.titulo }}</strong>
+                <span class="etiqueta">{{ ORIGENS[c.origem] ?? c.origem }}</span>
+              </div>
+              <div class="botoes">
+                <button class="secundario pequeno" @click="abrirCenario(c.id)">Editar</button>
+                <button class="perigo pequeno" @click="excluirEsteCenario(c)">Excluir</button>
+              </div>
+            </header>
+            <ol class="passos">
+              <li v-for="p in c.passos" :key="p.id">
+                <span class="tipo">{{ rotuloTipo(p.tipo) }}</span> {{ p.texto }}
+              </li>
+            </ol>
+          </article>
         </div>
-      </template>
 
-      <MensagemErro :erro="erroAcao" />
-
-      <div class="cabecalho secao">
-        <h2>Cenários</h2>
-        <button v-if="cenarioAberto === null" @click="abrirCenario('novo')">+ Novo cenário</button>
+        <!-- coluna da direita: as sugestões da IA desta história -->
+        <PainelSugestoes :historia-id="historiaId" @mudou="arquivo = null" />
       </div>
-
-      <EditorCenario
-          v-if="cenarioAberto !== null"
-          :key="cenarioAberto"
-          :inicial="inicialCenario"
-          :salvando="salvandoCenario"
-          :erro="erroCenario"
-          @salvar="salvarCenario"
-          @cancelar="cenarioAberto = null"
-      />
-
-      <p v-if="cenarios.length === 0 && cenarioAberto === null">Esta história ainda não tem cenários.</p>
-
-      <article v-for="c in cenarios" :key="c.id" class="cenario">
-        <header>
-          <div>
-            <strong>{{ c.titulo }}</strong>
-            <span class="etiqueta">{{ ORIGENS[c.origem] ?? c.origem }}</span>
-          </div>
-          <div class="botoes">
-            <button class="secundario pequeno" @click="abrirCenario(c.id)">Editar</button>
-            <button class="perigo pequeno" @click="excluirEsteCenario(c)">Excluir</button>
-          </div>
-        </header>
-        <ol class="passos">
-          <li v-for="p in c.passos" :key="p.id">
-            <span class="tipo">{{ rotuloTipo(p.tipo) }}</span> {{ p.texto }}
-          </li>
-        </ol>
-      </article>
     </template>
   </section>
 </template>

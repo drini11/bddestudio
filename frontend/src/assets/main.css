@@ -97,3 +97,22 @@ button.pequeno { padding: 0.25rem 0.55rem; }
 .passos { list-style: none; padding: 0; margin: 0.5rem 0 0; }
 .passos li { padding: 0.15rem 0; }
 .passos .tipo { display: inline-block; min-width: 4.5rem; font-weight: 700; color: var(--cor-primaria); }
+
+.duas-colunas { display: grid; grid-template-columns: minmax(0, 1fr) 24rem; gap: 1.5rem; align-items: start; }
+@media (max-width: 900px) { .duas-colunas { grid-template-columns: 1fr; } }
+
+.painel-sugestoes { background: #fff; border: 1px solid var(--cor-borda); border-radius: 8px; padding: 1rem; }
+.painel-sugestoes h2 { margin: 0; font-size: 1.1rem; }
+.sugestao { border-top: 1px solid var(--cor-borda); padding: 0.75rem 0; display: grid; gap: 0.4rem; }
+.sugestao header { display: flex; justify-content: space-between; align-items: center; }
+.texto-longo { white-space: pre-wrap; margin: 0.25rem 0; }
+.decisao-info { font-size: 0.9rem; margin: 0.25rem 0 0; }
+.decisao-pendente { background: #fef3c7; color: #92400e; }
+.decisao-aceita { background: #dcfce7; color: #166534; }
+.decisao-rejeitada { background: #fee2e2; color: #991b1b; }
+.formulario.compacto { margin: 0; padding: 0.6rem; }
+
+textarea { padding: 0.45rem 0.6rem; border: 1px solid var(--cor-borda); border-radius: 6px; font: inherit; resize: vertical; }
+
+.previa { background: #fff; border: 1px solid var(--cor-borda); border-radius: 8px; padding: 0.75rem; margin: 0.75rem 0; }
+.previa pre { margin: 0.5rem 0 0; white-space: pre-wrap; font-size: 0.85rem; background: #f3f4f6; padding: 0.6rem; border-radius: 6px; overflow-x: auto; }
