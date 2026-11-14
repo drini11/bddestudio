@@ -159,8 +159,7 @@ Usei o Claude como ferramenta de desenvolvimento. O registro das interações es
 | Documentação dos endpoints | [`docs/API.md`](docs/API.md) |
 | Arquivo `.feature` exportado pelo sistema | [`docs/exemplo-reservar-livro.feature`](docs/exemplo-reservar-livro.feature) |
 | Registro de IA | [`docs/REGISTRO_IA.md`](docs/REGISTRO_IA.md) |
-| Roteiro e evidências de verificação | [`docs/ROTEIRO_VERIFICACAO.md`](docs/ROTEIRO_VERIFICACAO.md) e `docs/evidencias/` |
-| Atividade bônus | não implementada |
+| Roteiro de verificação | [`docs/ROTEIRO_VERIFICACAO.md`](docs/ROTEIRO_VERIFICACAO.md) |
 
 ## Estrutura do repositório
 
